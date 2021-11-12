@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="shadow-lg p-4 mb-5 bg-body rounded" style="margin-top:1.5rem;">
+    <center><h1>Delete Account</h1></center><hr>
+    <form action="" method=POST>
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username">
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+          <label for="floatingPassword">Password</label>
+        </div><br>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="showPassword();">
+          <label class="form-check-label" for="flexCheckDefault">
+            Show Password
+          </label>
+        </div>
+        <br>
+        <div style="display:flex-start;">
+            <button class="btn btn-danger" style="margin-top:0.5rem;">Delete</button>
+            <a class="btn btn-primary" style="margin-top:0.5rem;" href="{% url 'home' %}">Cancel</a>
+        </div>
+    </form>
+    <br></div>
+    <script>
+    function showPassword(){
+        var p1 = document.getElementById('floatingPassword');
+        if (p1.type == 'password'){
+            p1.type = 'text';
+        }else{
+            p1.type = 'password';
+        }
+      }
+    </script>
+{% endblock %}

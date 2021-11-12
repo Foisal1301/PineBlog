@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Add Reply{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if user.profile %}
+            <center><h1>Add Reply</h1><hr></center>
+            <div class="form-group">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-floating">
+                      <textarea name="body" class="form-control" cols="40" rows="10" required placeholder="Leave a comment here" id="id_body" style="height: 100px"></textarea><label>Reply</label>
+                    </div><br>
+                    <button class="btn btn-success">Add</button>
+                </form>
+            </div>
+        {% else %}
+            <center><h1>You have to create profile first</h1></center>
+            <br><center><a href="{% url 'create-profile' %}" class="btn btn-secondary">Create your profile</a></center>
+        {% endif %}
+    {% else %}
+        <br><center><h1>You have to log in first</h1></center>
+        <br><center><a href="{% url 'login' %}" class="btn btn-secondary">Log in</a></center>
+    {% endif %}
+{% endblock %}

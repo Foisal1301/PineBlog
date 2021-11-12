@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Home | PineBlog{% endblock %}
+{% block content %}
+    <center><h1>Posts</h1></center><hr>
+    <div style="display:flex-start;">
+        <a href="{% url 'create-post' %}" class="btn btn-primary{% if not user.is_authenticated %} disabled{% endif %}" style="margin-top:0.5rem;">Create Post</a>
+        <a class="btn btn-success{% if not user.is_authenticated %} disabled{% endif %}" href="{% url 'add-category' %}" style="margin-top:0.5rem;">Add Category</a>
+        <div class="btn-group" style="margin-top:0.5rem;">
+          <a class="btn btn-info" href="{% url 'categories' %}">Categories</a>
+          <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            {% if cat_menu %}
+                {% for item in cat_menu %}
+                <li><a class="dropdown-item" href="{% url 'category' item.id %}">{{ item }}</a></li>
+                {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+    </div>
+
+    <br>
+    {% if object_list|length == 0 %}
+        <center><h3>No Post Here</h3></center><br>
+    {% else %}
+        {% for post in object_list %}
+            <div class="card" style="margin-top:0.5rem;">
+              <h5 class="card-header" style="background:#e6f2f1;"><i class="fas fa-user-circle"></i> <a href="{% url 'show-profile' post.author.profile.id %}">{{ post.author }}</a></h5>
+              <div class="card-body">
+                <h1 class="card-title"><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a></h1><small>Category : <a href="{% url 'category' post.category.id %}">{{ post.category }}</a></small><br><small>- {{ post.post_date }}{% if user.is_authenticated %}{% if user.id == post.author.id %} - <a href="{% url 'edit-post' post.pk %}">(Edit)</a> - <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal1">(Delete)</a></small><br><br>
+                {% include 'delete_post.html' %}{% endif %}{% endif %}
+                {% if post.body|length < 200 %}
+                  <p class="card-text">{{ post.body|safe }}</p>
+                {% else %}
+                  <p class="card-text">{{ post.body|safe|slice:":200" }} <a href="{% url 'article-detail' post.pk %}">See more</a></p>
+                {% endif %}
+                <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+              </div>
+              <!--<div class="card-footer text-muted">
+                  <form action="{% url 'like-post' post.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-{% if liked %}danger{% else %}primary{% endif %} {% if user.is_authenticated %}{% else %}disabled{% endif %} btn-sm" type="submit" name="post_id" value="{{ post.id }}">{% if liked %}Unlike{% else %}Like{% endif %}{% if total_likes != 0 %} {{ total_likes }} {% endif %}</button>
+                  </form>
+              </div>-->
+            </div><br>
+        {% endfor %}
+    {% endif %}
+    <script>
+        var x = document.getElementsByTagName('img');
+        x[0].src='';
+        x[0].alt='';
+    </script>
+{% endblock %}

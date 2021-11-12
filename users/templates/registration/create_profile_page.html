@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Create Profile{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Create Profile</h1><hr>
+        <div class="form-group">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-success">Create</button>
+            </form>
+        </div><br>
+        <script>
+            document.getElementById("id_user").value = '{{ user.id }}';
+        </script>
+    {% else %}
+        <br><center><h1>Sorry,you are not able to create profile!</h1></center>
+    {% endif %}
+{% endblock %}

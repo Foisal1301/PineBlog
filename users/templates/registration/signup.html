@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+    <div class="shadow-lg p-4 mb-5 bg-body rounded" style="margin-top:1.5rem;">
+        <center><h1>Sign Up</h1></center><hr>
+        <div class="form-group">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="showPassword()">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Show Password
+                  </label>
+                </div><br>
+                <button class="btn btn-success">Sign up</button>
+            </form>
+        </div><br></div>
+    <script>
+        function showPassword(){
+            var p1 = document.getElementById('id_password1');
+            var p2 = document.getElementById('id_password2');
+            if (p1.type === 'password' && p2.type === 'password'){
+                p1.type = 'text';
+                p2.type = 'text';
+            }else{
+                p1.type = 'password';
+                p2.type = 'password';
+            }
+        }
+    </script>
+{% endblock %}

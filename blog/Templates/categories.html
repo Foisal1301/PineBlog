@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+    <center><h1>Categories</h1></center><hr>
+    {% if cat_menu %}
+        <table class="table table-striped table-bordered table-hover">
+            {% for item in cat_menu %}
+                <tr>
+                    <td><a href="{% url 'category' item.id %}">{{ item }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <center><a href="{% url 'add-category' %}" class="btn btn-secondary">Add Category</a></center>
+    {% else %}
+        <br><center><h3>There is no category!</h3></center><br>
+    {% endif %}
+{% endblock %}

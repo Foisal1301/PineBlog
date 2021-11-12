@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+    <div class="shadow-lg p-4 mb-5 bg-body rounded" style="margin-top:1.5rem;">
+        <center><h1>Login</h1></center><hr>
+        <div class="form-group">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                  <input name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required type="text" class="form-control" placeholder="Username"><label>Username</label>
+                </div>
+                <div class="form-floating">
+                  <input type="password" class="form-control" name="password" autocomplete="current-password" required placeholder="Password" id="id_password"><label>Password</label>
+                </div><br>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="showPassword()">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Show Password
+                  </label>
+                </div><br>
+                <div style="display:flex-start;">
+                    <button class="btn btn-success" style="margin-top:0.5rem;">Log in</button>
+                    <a class="btn btn-primary" style="margin-top:0.5rem;" href="{% url 'signup' %}">Sign Up</a>
+                    <a class="btn btn-warning" style="margin-top:0.5rem;" href="#">Forgotten password?</a>
+                </div>
+            </form>
+        </div></div>
+    <script>
+        function showPassword(){
+            var p1 = document.getElementById('id_password');
+            if (p1.type === 'password'){
+                p1.type = 'text';
+            }else{
+                p1.type = 'password';
+            }
+        }
+    </script>
+{% endblock %}

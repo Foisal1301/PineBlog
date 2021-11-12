@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ page_user.user.first_name }} {{ page_user.user.last_name }} | PineBlog{% endblock %}
+{% block content %}
+    <br><center>
+    <div class="card mb-3" style="max-width: 80%;">
+      <div>
+        <div class="col-md-4">
+          {% if page_user.profile_pic %}
+            <img src="{{ page_user.profile_pic.url }}" class="img-fluid rounded-circle" alt="{{ page_user.user.first_name}} {{page_user.user.last_name }}">
+          {% else %}
+            <img src="{% static '/blog/images/default.png' %}" class="img-fluid rounded-circle" alt="{{ page_user.user.first_name}} {{page_user.user.last_name }}">
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ page_user.user.first_name }} {{ page_user.user.last_name }}<small>- {{ page_user.user }}</small></h5>
+            <p class="small text-muted">
+                {% if page_user.website_url %}<a href="{{ page_user.website_url }}">Website</a>{% endif %}
+                {% if page_user.fb_url %}<a href="{{ page_user.fb_url }}"> | Facebook</a>{% endif %}
+                {% if page_user.twitter_url %}<a href="{{ page_user.twitter_url }}">| Twitter</a>{% endif %}
+                {% if page_user.insta_url %}<a href="{{ page_user.insta_url }}"> | Instagram</a>{% endif %}
+                {% if page_user.pinterest_url %}<a href="{{ page_user.pinterest_url }}"> | Pinterest</a>{% endif %}</p>
+            <p class="card-text">{{ page_user.bio|safe }}</p>
+            {% if page_user.id == user.profile.id %}
+            <div class="row" style="margin-bottom:0.5rem;"><a href="{% url 'edit-profile' user.profile.id %}" class="btn btn-primary">Edit your Profile</a></div>
+            <div class="row" style="margin-bottom:0.5rem;"><a href="{% url 'privacy-settings' %}" class="btn btn-secondary">Privcacy Settings</a></div>
+            <div class="row" style="margin-bottom:0.5rem;"><a href="{% url 'change-password' %}" class="btn btn-warning">Change Password</a></div>
+            <div class="row" style="margin-bottom:0.5rem;"><a class="btn btn-danger"  data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete your account</a></div>
+            {% endif %}
+          </div>
+        </div>
+      </div></div></center><br>
+    <center><h1>Post</h1></center><hr>
+    {% if posts %}
+    {% for post in posts %}
+        <div class="card" style="margin-top:0.5rem;">
+          <h5 class="card-header" style="background:#e6f2f1;"><i class="fas fa-user-circle"></i> {{ post.author }}</h5>
+          <div class="card-body">
+            <h1 class="card-title"><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a></h1><small>Category : <a href="{% url 'category' post.category.id %}">{{ post.category }}</a></small><br><small>- {{ post.post_date }}{% if user.is_authenticated %}{% if user.id == post.author.id or user.is_superuser %} - <a href="{% url 'edit-post' post.pk %}">(Edit)</a> - <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal1">(Delete)</a></small><br><br>
+              {% include 'delete_post.html' %}{% endif %}{% endif %}
+            {% if post.body|length < 200 %}
+              <p class="card-text">{{ post.body|safe }}</p>
+            {% else %}
+              <p class="card-text">{{ post.body|safe|slice:":200" }} <a href="{% url 'article-detail' post.pk %}">See more</a></p>
+            {% endif %}
+            <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+          </div>
+          <!--<div class="card-footer text-muted">
+              <form action="{% url 'like-post' post.pk %}" method="POST">
+                {% csrf_token %}
+                <button class="btn btn-{% if liked %}danger{% else %}primary{% endif %} {% if user.is_authenticated %}{% else %}disabled{% endif %} btn-sm" type="submit" name="post_id" value="{{ post.id }}">{% if liked %}Unlike{% else %}Like{% endif %}{% if total_likes != 0 %} {{ total_likes }} {% endif %}</button>
+              </form>
+          </div>-->
+        </div><br>
+    {% endfor %}
+    {% else %}
+        <center><h3>No post here</h3></center><br>
+    {% endif %}
+    
+{% endblock %}

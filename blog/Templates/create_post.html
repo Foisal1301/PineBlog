@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Create post{% endblock %}
+{% block content %}
+<div class="shadow-lg p-4 mb-5 bg-body rounded" style="margin-top:1.5rem;">
+    {% if user.is_authenticated %}
+        {% if user.profile %}
+        <center><h1>Create Post</h1></center><hr>
+        <div class="form-group">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <button class="btn btn-success">Post</button>
+            </form>
+        </div>
+        <script>
+            document.getElementById("author").value = '{{ user.id }}';
+        </script>
+        {% else %}
+        <br><center><h1>You have to create profile first!</h1></center>
+        <br><center><a href="{% url 'create-profile' %}" class="btn btn-secondary">Create your profile</a></center>
+        {% endif %}
+    {% else %}
+        <br><center><h1>You have to log in first!</h1></center>
+        <br><center><a href="{% url 'login' %}" class="btn btn-secondary">Log in</a></center>
+    {% endif %}
+</div>
+{% endblock %}

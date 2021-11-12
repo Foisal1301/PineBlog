@@ -1,0 +1,82 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">PineBlog</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+        </li>
+        {% if user.is_authenticated and user.profile %}
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'create-post' %}">Create Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'add-category' %}">Add Category</a>
+          </li>
+        {% endif %}
+        <!--
+        <li class="nav-item active dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        -->
+
+      </ul>
+      <form class="d-flex" method=POST action="{% url 'search' %}" style="margin:0.5rem;">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+        <button class="btn btn-success" type="submit">Search</button>
+      </form>
+      {% if cat_menu %}
+        <div class="btn-group" style="margin:0.5rem;">
+          <a type="button" class="btn btn-secondary" href="{% url 'categories' %}">Categories</a>
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end">
+            {% for item in cat_menu %}
+            <li><a class="dropdown-item" href="{% url 'category' item.id %}">{{ item }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <div class="btn-group" style="margin:0.5rem;">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ user }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark dropdown-menu-end">
+            {% if user.profile %}
+            <li><a class="dropdown-item" href="{% url 'show-profile' user.profile.id %}">Go to your profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'edit-profile' user.profile.id %}">Edit your profile</a></li>
+            {% else %}
+            <li><a class="dropdown-item" href="{% url 'create-profile' %}">Create your profile</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="{% url 'privacy-settings' %}">Privacy Settings</a></li>
+            <li><a class="dropdown-item" href="{% url 'change-password' %}">Change your password</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete your account</a></li>
+            {% if user.is_superuser and admin %}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ admin }}">Admin Panel</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a></li>
+          </ul>
+        </div>
+      {% else %}
+        <a style="margin:0.5rem;" class="btn btn-secondary" href="{% url 'signup' %}">Sign Up</a>
+        <a style="margin:0.5rem;" class="btn btn-secondary" href="{% url 'login' %}">Sign In</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+{% include 'delete_user_modal.html' %}
