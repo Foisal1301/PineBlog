@@ -24,6 +24,7 @@ class PostEditForm(forms.ModelForm):
             'category':forms.Select(attrs={'class':'form-select'}),
             'body':forms.Textarea(attrs={'class':'form-control'}),
         }
+
 class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -44,33 +45,9 @@ class AddReplyForm(forms.ModelForm):
             'body':forms.Textarea(attrs={'class':'form-control'}),
         }
 
-class AdminPostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ('title','author','category','body','header_image')
-
-        widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control'}),
-            'author':forms.Select(attrs={'class':'form-select'}),
-            'category':forms.Select(attrs={'class':'form-select'}),
-            'body':forms.Textarea(attrs={'class':'form-control'}),
-        }
-
 class AddCategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = '__all__'
 
         widgets = {'name':forms.TextInput(attrs={'class':'form-control'}),}
-
-class AdminPostEditForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ('title','category','author','body',)
-
-        widgets = {
-            'title':forms.TextInput(attrs={'class':'form-control'}),
-            'category':forms.Select(attrs={'class':'form-select'}),
-            'author':forms.Select(attrs={'class':'form-select'}),
-            'body':forms.Textarea(attrs={'class':'form-control'}),
-        }
